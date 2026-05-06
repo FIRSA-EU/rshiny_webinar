@@ -11,10 +11,10 @@ format:
   revealjs:
     logo: logo_pres.png
     theme: simple
-    css: firsa.css
+    css: firsa.css 
 
 abstract: > 
-  Slides for a FIRSA Webinar on Building Research Dashboards with RShiny
+  Slides for the FIRSA Webinar on Building Research Dashboards with R and Shiny.
   
 categories:
 - Talks
