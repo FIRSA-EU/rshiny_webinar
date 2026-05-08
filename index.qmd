@@ -40,16 +40,32 @@ communicate through a paper or even a presentation.
 - With dashboards, users can filter data, inspect indicators, compare
 cases, and see how results change without touching the underlying code.
 
-- For research communication, the goal is to make part of the evidence base easier to inspect, reuse, and discuss.
+- For research communication, the goal is to make part of the evidence easier to inspect, reuse, and discuss.
 
 ## What is R `Shiny`?
 
-A Shiny app is a web app connected to a computer running an R session.
-The front facing elements are in the User Interface (UI) and the back
+<br>
+
+- A `Shiny` app is a web app connected to a computer running an R session.
+
+- The front facing elements are in the User Interface (UI) and the back
 code is in the Server.
 
-Users can manipulate the UI, which updates the code in the server and
-gets reflected back to the ui
+- Users can manipulate the UI, which updates the code in the server and
+gets reflected back to the UI.
+
+
+## R `Shiny` Workflow 
+
+<br>
+
+User changes input  
+↓  
+Shiny stores value in `input$...`  
+↓  
+Server runs the relevant `render...()` code  
+↓  
+UI updates the matching output
 
 ## Setting up an `Shiny` app template
 
@@ -61,8 +77,8 @@ gets reflected back to the ui
 
 `Shiny` creates interactive apps for users using R code. The **server**
 that hosts it must have R installed (in this case your laptop) to run.
-You can push your apps directly into
-\href{https://www.shinyapps.io/}{shinnyapps} and share your projects!
+
+<br>
 
 ```{r echo=TRUE, eval=FALSE}
 
@@ -76,7 +92,7 @@ shinyApp(ui = ui, server = server) # runs the app
 
 ```
 
-## The User Interface **UI**
+## The User Interface *UI*
 
 The `fluidPage()` command creates HTML code which is used to construct
 the web page. It contains the elements we want as inputs (from users)
@@ -98,7 +114,7 @@ ui <- fluidPage(
 
 ## The Server Function
 
-The
+The server function contains the R code that reacts to user inputs, creates outputs such as plots or tables, and sends those results back to the user interface.
 
 ```{r echo=TRUE, eval=FALSE}
 
@@ -156,7 +172,7 @@ ui <- fluidPage(
 
 ## Render Functions (Server)
 
-`render()` functions create outputs from R scripts and transforms them
+`render()` functions create **outputs** from R scripts and transforms them
 to HTML code which can be displayed in our web page. These commands go
 in the server.
 
@@ -173,12 +189,34 @@ server <- function(input, output){
 
 ```
 
+## Input and Output Vocabulary
+
+::: {style="font-size: 0.45em;"}
+
+| Purpose | UI function | What it does | Server pair |
+|---|---|---|---|
+| Dropdown selection | `selectInput()` | Lets the user choose one or more options from a list | `input$...` |
+| Slider | `sliderInput()` | Lets the user choose a value or range by dragging | `input$...` |
+| Checkbox | `checkboxInput()` | Lets the user turn an option on or off | `input$...` |
+| Numeric entry | `numericInput()` | Lets the user type a number | `input$...` |
+| Text entry | `textInput()` | Lets the user type text | `input$...` |
+| Date selection | `dateInput()` / `dateRangeInput()` | Lets the user choose a date or period | `input$...` |
+| Plot display | `plotOutput()` | Shows a plot created in the server | `renderPlot()` |
+| Text display | `textOutput()` | Shows short text | `renderText()` |
+| Printed text | `verbatimTextOutput()` | Shows printed or preformatted text | `renderPrint()` |
+| Table display | `tableOutput()` | Shows a basic table | `renderTable()` |
+| Interactive table | `DTOutput()` | Shows a searchable interactive table | `renderDT()` |
+| HTML content | `htmlOutput()` | Shows HTML generated in the server | `renderUI()` / `renderText()` |
+
+:::
+
 ## Panel Layouts (UI)
 
 ![](figures/shinylayout.png)
 
 ## Panel Layouts (UI)
 
+::: {style="font-size: 0.9em;"}
 ::::: columns
 ::: {.column width="60%"}
 ```{r echo=TRUE, eval=FALSE}
@@ -210,6 +248,49 @@ ui <- fluidPage(
 ![](figures/example_layout.png)
 :::
 :::::
+:::
+
+## App folders and file organization
+
+<br>
+
+::: {style="font-size: 0.8em;"}
+
+::::: columns
+::: {.column width="50%"}
+
+- A small `Shiny` app can live in a single file called `app.R`. 
+
+- Research dashboards often need separate data files, helper scripts, images, logos, CSS, or downloadable outputs. 
+
+- For larger apps, it is also possible to split the interface and server logic into separate files called `ui.R` and `server.R`. 
+
+:::
+
+::: {.column width="50%"}
+
+```{echo=TRUE, eval=FALSE}
+my_app/
+├── ui.R
+├── server.R
+├── data/
+│   └── penguins.csv
+├── R/
+│   └── helpers.R
+├── figures/
+│   └── histogram.png
+│   └── scatterplot.png
+├── www/
+│   ├── styles.css
+│   └── icon.png
+└── outputs/
+    └── filtered_data.csv
+```
+:::
+
+::::: 
+
+:::
 
 # Penguins Example
 
@@ -384,21 +465,39 @@ shinyApp(ui = ui, server = server)
 ::::
 :::::::
 
-## Publish App
-
-![](figures/deploy.gif)
-
 # More Examples
 
 ##  {background-iframe="https://parmsam.shinyapps.io/MixThingsUp/"}
 
-##  {background-iframe="https://nicohahn.shinyapps.io/spotify_habits/"}
-
 ##  {background-iframe="https://dashboard.firsa.eu/"}
+
+## Publishing and deployment options
+
+::: {style="font-size: 0.8em;"}
+
+- A `Shiny` app needs an R session running in the background, so it cannot be published in exactly the same way as a static HTML page.
+
+- The easiest option is usually **shinyapps.io**, which lets you deploy directly from RStudio with very little setup: `rsconnect::deployApp()`.
+
+- Institutions sometimes use **Posit Connect** or **Shiny Server**, which are useful when apps need more control, authentication, or internal hosting.
+
+- More advanced users can also deploy apps with **Docker** or cloud services such as **Google Cloud Run**.
+
+> *Start by building the app locally, then publish a simple version with **shinyapps.io**. Once the app becomes larger or more important, you can consider more advanced hosting options.*
+
+:::
+
+## Publish via *shinyapps.io*
+
+![](figures/deploy.gif)
 
 ## Dashboards for Research
 
-\[ideas here? as conclusioons\]
+- Interactivity should **serve interpretation**. Elements like plots, and tables should help users understand the evidence base, not distract from it.
+
+- Dashboards can **improve transparency** by showing the data behind claims, including coding decisions, country profiles, and methodological notes. But it should not show *everything*.
+
+- They are especially useful for **public-facing research**, policy audiences, teaching, and projects that produce reusable data.
 
 # Thank you for your attention!
 
