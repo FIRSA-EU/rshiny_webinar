@@ -292,7 +292,7 @@ my_app/
 
 :::
 
-# Penguins Example
+## 
 
 ::::::: columns
 :::: {.column width="50%"}
@@ -304,7 +304,7 @@ my_app/
 ::::
 
 :::: {.column width="50%"}
-::: {style="font-size: 0.55em;"}
+::: {style="font-size: 0.6em;"}
 ```{r echo=TRUE, eval=FALSE}
 # File Name: app.R
 # Simple Palmer Penguins Shiny App
@@ -312,13 +312,12 @@ my_app/
 # Set Up ----------------------------------------------------------------------
 
 # Install packages if needed:
-# install.packages(c("shiny", "palmerpenguins", "dplyr", "ggplot2", "DT"))
+# install.packages(c("shiny", "palmerpenguins", "dplyr", "ggplot2"))
 
 library(shiny)
 library(palmerpenguins)
 library(dplyr)
 library(ggplot2)
-library(DT)
 
 # Data ------------------------------------------------------------------------
 
@@ -361,10 +360,7 @@ ui <- fluidPage(
       verbatimTextOutput("summary_text"),
       
       h3("Scatterplot"),
-      plotOutput("penguin_plot", height = "450px"),
-      
-      h3("Data"),
-      DTOutput("penguin_table")
+      plotOutput("penguin_plot", height = "450px")
     )
   )
 )
@@ -436,25 +432,6 @@ server <- function(input, output) {
     p
   })
   
-  output$penguin_table <- renderDT({
-    data <- penguins
-    
-    if (input$species != "All") {
-      data <- data |>
-        filter(species == input$species)
-    }
-    
-    if (input$island != "All") {
-      data <- data |>
-        filter(island == input$island)
-    }
-    
-    datatable(
-      data,
-      options = list(pageLength = 8),
-      rownames = FALSE
-    )
-  })
 }
 
 # Run app ---------------------------------------------------------------------
@@ -465,9 +442,7 @@ shinyApp(ui = ui, server = server)
 ::::
 :::::::
 
-# More Examples
-
-##  {background-iframe="https://parmsam.shinyapps.io/MixThingsUp/"}
+# FIRSA Dashboard Example
 
 ##  {background-iframe="https://dashboard.firsa.eu/"}
 
